@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rss_sources",
+  "info": {
+    "singularName": "rss-source",
+    "pluralName": "rss-sources",
+    "displayName": "rssSource"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "link": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+
+}

@@ -4,15 +4,40 @@
   "info": {
     "singularName": "item",
     "pluralName": "items",
-    "displayName": "item"
+    "displayName": "item",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
     "title": {
+      "type": "string",
+      "unique": true
+    },
+    "content": {
+      "type": "text"
+    },
+    "author": {
+      "type": "string",
+      "default": "unknown"
+    },
+    "source": {
       "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "pubDate": {
+      "type": "datetime",
+      "default": "2022-09-22T21:02:00.000Z"
+    },
+    "thumbnail": {
+      "type": "string"
+    },
+    "link": {
+      "type": "text"
     }
   }
 }
