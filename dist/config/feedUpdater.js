@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = void 0;
 // console.log('cron is running');
 const rss_parser_1 = __importDefault(require("rss-parser"));
-const errors_1 = require("@strapi/utils/lib/errors");
 // 2
 async function getNewFeedItemsFrom(feedUrl) {
     let rss;
@@ -28,7 +27,6 @@ async function getNewFeedItemsFrom(feedUrl) {
             item.thumbnail = (Array.isArray(item['media:content'])) ? item['media:content'][0]['$'].url : 'https://picsum.photos/500/200';
             // console.log( item.thumbnail);
             item.soruce = rss.title;
-            console.log(item.title);
             items.push(item);
         });
     }
@@ -120,11 +118,10 @@ async function main() {
             console.log(newsItem.title);
         }
         catch (error) {
-            console.error("Something went wrong in create");
-            if (error instanceof errors_1.YupValidationError)
-                console.error(error.message);
-            else
-                console.log(error.message);
+            // console.error("Something went wrong in create");
+            // if (error instanceof YupValidationError)
+            //   console.error(error.message);
+            // else console.log(error.message);
         }
     }
 }

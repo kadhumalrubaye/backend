@@ -5,8 +5,6 @@ import Parser from 'rss-parser';
 
 import { YupValidationError } from '@strapi/utils/lib/errors';
 
-import { Strapi } from '@strapi/strapi';
-import { ItemDto } from './../src/api/item/dto/item'
 
 
 
@@ -37,7 +35,7 @@ async function getNewFeedItemsFrom(feedUrl: string) {
       item.thumbnail = (Array.isArray(item['media:content'])) ? item['media:content'][0]['$'].url : 'https://picsum.photos/500/200';
       // console.log( item.thumbnail);
       item.soruce = rss.title;
-      console.log(item.title);
+
       items.push(item);
     });
   } catch (error) {
@@ -87,7 +85,10 @@ async function getNewFeedItems() {
     const {
       link
     } = feeds[i];
+
+
     const feedItems = await getNewFeedItemsFrom(link);
+
     // console.info(feedItems[0].title);
     allNewFeedItems = [...allNewFeedItems, ...feedItems];
   }
@@ -157,12 +158,12 @@ export async function main() {
       });
       console.log(newsItem.title);
     } catch (error) {
-      console.error("Something went wrong in create");
+      // console.error("Something went wrong in create");
 
 
-      if (error instanceof YupValidationError)
-        console.error(error.message);
-      else console.log(error.message);
+      // if (error instanceof YupValidationError)
+      //   console.error(error.message);
+      // else console.log(error.message);
 
 
     }

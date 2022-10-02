@@ -2,7 +2,7 @@
   "name": "backend",
   "private": true,
   "version": "0.1.0",
-  "description": "A Strapi application",
+  "description": "al shaan al iraqi backend",
   "scripts": {
     "develop": "strapi develop",
     "start": "strapi start",
@@ -11,9 +11,9 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@strapi/plugin-i18n": "4.3.2",
-    "@strapi/plugin-users-permissions": "4.3.2",
-    "@strapi/strapi": "4.3.2",
+    "@strapi/strapi": "4.4.0",
+    "@strapi/plugin-users-permissions": "4.3.9",
+    "@strapi/plugin-i18n": "4.4.0",
     "axios": "^0.27.2",
     "better-sqlite3": "7.4.6",
     "cheerio": "^1.0.0-rc.12",

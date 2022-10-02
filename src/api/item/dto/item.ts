@@ -1,4 +1,5 @@
 export class ItemDto {
+    id: number
     title: String
     description: String
     contetn: String
