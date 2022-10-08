@@ -46,12 +46,12 @@ export default factories.createCoreController('api::bookmark.bookmark', {
         try {
             const entries = await strapi.db.query('api::bookmark.bookmark').findOne({
 
-                // populate: ["items"],
+                populate: ["items"],
 
                 where: { user: currentUserId },
 
 
-                // populate: { category: true },
+
             });
 
             return entries;
@@ -65,6 +65,7 @@ export default factories.createCoreController('api::bookmark.bookmark', {
 
 
 
+        const currentUserId = ctx.state.user.id
         const { id } = ctx.request.params
         console.log(id);
 
@@ -97,6 +98,8 @@ export default factories.createCoreController('api::bookmark.bookmark', {
                 data: {
                     items: [...bookmarkItems.items, ...newItesm],
                 },
+
+                sort: { items: 'desc' },
             });
             console.log(entry);
 

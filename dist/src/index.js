@@ -8,7 +8,6 @@ exports.default = {
      * This gives you an opportunity to extend code.
      */
     register({ strapi }) {
-        strapi.runLifecyclesFunctions('register');
     },
     /**
      * An asynchronous bootstrap function that runs before

@@ -1,11 +1,12 @@
 'use strict';
 
-import { main } from './feedUpdater'
+import { FeedUpdater } from './feedUpdater'
 
 
 export async function updateFeed() {
+  const feedUpdater: FeedUpdater = new FeedUpdater();
 
-  return await main();
+  return await feedUpdater.main();
 
 }
 

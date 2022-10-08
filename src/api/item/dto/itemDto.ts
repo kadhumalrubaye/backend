@@ -1,8 +1,8 @@
 export class ItemDto {
     id: number
     title: String
-    description: String
     contetn: String
+    description: String
     thumbnail: String
     link: String
     source: String
