@@ -1,3 +1,3 @@
 export default ({ env }) => ({
-    url: env('MY_HEROKU_URL'),
+    url: env('https://asi-backend.herokuapp.com'),
 });
