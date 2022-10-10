@@ -19,7 +19,7 @@
             "type": "relation",
             "relation": "manyToMany",
             "target": "api::item.item",
-            "inversedBy": "categories"
+            "mappedBy": "categories"
         }
     }
 }
