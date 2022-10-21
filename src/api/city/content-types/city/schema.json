@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "ministries",
+  "collectionName": "cities",
   "info": {
-    "singularName": "ministry",
-    "pluralName": "ministries",
-    "displayName": "ministry",
+    "singularName": "city",
+    "pluralName": "cities",
+    "displayName": "city",
     "description": ""
   },
   "options": {
@@ -21,7 +21,7 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::item.item",
-      "mappedBy": "ministry"
+      "mappedBy": "city"
     }
   }
 }

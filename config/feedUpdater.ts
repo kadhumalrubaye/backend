@@ -5,7 +5,7 @@ import { Item, Output } from 'rss-parser';
 
 
 import { YupValidationError } from '@strapi/utils/lib/errors';
-import { DownloadImage } from '../config/image_download'
+// import { DownloadImage } from '../config/image_download'
 import { RssSourceEntry } from './rss_srouce_entru';
 import { ItemDto } from '../src/api/item/dto/itemDto';
 
@@ -54,6 +54,8 @@ export class FeedUpdater {
       console.error("Something went wrong in getNewFeedItemsFrom");
       console.error(error.message);
     }
+    console.log('item in rss');
+
     console.log(items[0].title);
 
     return items;
@@ -119,6 +121,9 @@ export class FeedUpdater {
             source: item.source ?? 'no source'
           }
         });
+
+        console.log('item saved');
+
         console.log(newsItem);
       }
 

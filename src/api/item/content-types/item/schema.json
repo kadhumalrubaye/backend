@@ -53,6 +53,12 @@
       "relation": "manyToOne",
       "target": "api::ministry.ministry",
       "inversedBy": "items"
+    },
+    "city": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::city.city",
+      "inversedBy": "items"
     }
   }
 }

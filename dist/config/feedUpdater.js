@@ -44,6 +44,7 @@ class FeedUpdater {
             console.error("Something went wrong in getNewFeedItemsFrom");
             console.error(error.message);
         }
+        console.log('item in rss');
         console.log(items[0].title);
         return items;
     }
@@ -97,6 +98,7 @@ class FeedUpdater {
                         source: (_g = item.source) !== null && _g !== void 0 ? _g : 'no source'
                     }
                 });
+                console.log('item saved');
                 console.log(newsItem);
             }
             catch (error) {
