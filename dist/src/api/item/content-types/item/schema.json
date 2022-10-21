@@ -29,10 +29,6 @@
         "description": {
             "type": "text"
         },
-        "pubDate": {
-            "type": "datetime",
-            "default": "2022-09-22T21:02:00.000Z"
-        },
         "thumbnail": {
             "type": "string"
         },
@@ -48,6 +44,15 @@
         "urgent": {
             "type": "boolean",
             "default": false
+        },
+        "pubDate": {
+            "type": "string"
+        },
+        "ministry": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::ministry.ministry",
+            "inversedBy": "items"
         }
     }
 }

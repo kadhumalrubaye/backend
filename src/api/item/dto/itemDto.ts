@@ -7,7 +7,7 @@ export class ItemDto {
     link: String
     source: String
     author: String
-    pubDate: Date
+    pubDate: String
 
 }
 export class ItemDtoWithAttr {
@@ -20,7 +20,8 @@ export class ItemDtoWithAttr {
         link: String
         source: String
         author: String
-        pubDate: Date
+        pubDate: String,
+        urgent: boolean,
 
     }
 
