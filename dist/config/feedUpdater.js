@@ -6,9 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FeedUpdater = void 0;
 // console.log('cron is running');
 const rss_parser_1 = __importDefault(require("rss-parser"));
+require("./text_analysis");
 const errors_1 = require("@strapi/utils/lib/errors");
 const itemDto_1 = require("../src/api/item/dto/itemDto");
+const text_analysis_1 = require("./text_analysis");
 class FeedUpdater {
+    constructor() {
+        this.textAnalysis = new text_analysis_1.TextAnalyzer();
+    }
     // 2
     async getNewFeedItemsFrom(feedUrl) {
         let itemDto;
@@ -37,6 +42,7 @@ class FeedUpdater {
                 itemDto.thumbnail = (Array.isArray(item['media:content'])) ? item['media:content'][0]['$'].url : 'https://picsum.photos/500/200';
                 // console.log( item.thumbnail);
                 itemDto.source = rss.title;
+                itemDto.title = this.textAnalysis.cleanText(itemDto.title);
                 items.push(itemDto);
             });
         }
@@ -45,7 +51,7 @@ class FeedUpdater {
             console.error(error.message);
         }
         console.log('item in rss');
-        console.log(items[0].title);
+        console.log(items.length);
         return items;
     }
     // 3
@@ -85,6 +91,7 @@ class FeedUpdater {
         const feedItems = await this.getNewFeedItems();
         for (let i = 0; i < feedItems.length; i++) {
             const item = feedItems[i];
+            const cats = await this.textAnalysis.addItemToUrgentCategory(item);
             try {
                 const newsItem = await strapi.entityService.create('api::item.item', {
                     data: {
@@ -95,11 +102,12 @@ class FeedUpdater {
                         author: (_d = item.author) !== null && _d !== void 0 ? _d : 'unkown',
                         content: (_e = item.contetn) !== null && _e !== void 0 ? _e : 'no content',
                         thumbnail: (_f = item.thumbnail) !== null && _f !== void 0 ? _f : 'no link',
-                        source: (_g = item.source) !== null && _g !== void 0 ? _g : 'no source'
+                        source: (_g = item.source) !== null && _g !== void 0 ? _g : 'no source',
+                        categories: cats,
                     }
                 });
                 console.log('item saved');
-                console.log(newsItem);
+                // console.log(newsItem);
             }
             catch (error) {
                 if (error instanceof errors_1.YupValidationError) {

@@ -1,26 +1,26 @@
 export class ItemDto {
     id: number
-    title: String
-    contetn: String
-    description: String
-    thumbnail: String
-    link: String
-    source: String
-    author: String
-    pubDate: String
+    title: string
+    contetn: string
+    description: string
+    thumbnail: string
+    link: string
+    source: string
+    author: string
+    pubDate: string
 
 }
 export class ItemDtoWithAttr {
     id: number;
     attributes: {
-        title: String
-        contetn: String
-        description: String
-        thumbnail: String
-        link: String
-        source: String
-        author: String
-        pubDate: String,
+        title: string
+        contetn: string
+        description: string
+        thumbnail: string
+        link: string
+        source: string
+        author: string
+        pubDate: string,
         urgent: boolean,
 
     }

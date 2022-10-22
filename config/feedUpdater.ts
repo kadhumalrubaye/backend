@@ -3,19 +3,22 @@
 import Parser from 'rss-parser';
 import { Item, Output } from 'rss-parser';
 
-
+import './text_analysis'
 import { YupValidationError } from '@strapi/utils/lib/errors';
 // import { DownloadImage } from '../config/image_download'
 import { RssSourceEntry } from './rss_srouce_entru';
 import { ItemDto } from '../src/api/item/dto/itemDto';
+import { TextAnalyzer } from './text_analysis';
 
 
 
 
 
 export class FeedUpdater {
-
-
+  constructor() {
+    this.textAnalysis = new TextAnalyzer();
+  }
+  textAnalysis: TextAnalyzer;
 
 
   // 2
@@ -48,6 +51,7 @@ export class FeedUpdater {
         itemDto.thumbnail = (Array.isArray(item['media:content'])) ? item['media:content'][0]['$'].url : 'https://picsum.photos/500/200';
         // console.log( item.thumbnail);
         itemDto.source = rss.title;
+        itemDto.title = this.textAnalysis.cleanText(itemDto.title);
         items.push(itemDto);
       });
     } catch (error) {
@@ -56,7 +60,7 @@ export class FeedUpdater {
     }
     console.log('item in rss');
 
-    console.log(items[0].title);
+    console.log(items.length);
 
     return items;
   }
@@ -103,6 +107,7 @@ export class FeedUpdater {
 
     for (let i = 0; i < feedItems.length; i++) {
       const item: ItemDto = feedItems[i];
+      const cats: number[] = await this.textAnalysis.addItemToUrgentCategory(item);
 
       try {
 
@@ -118,13 +123,14 @@ export class FeedUpdater {
             author: item.author ?? 'unkown',
             content: item.contetn ?? 'no content',
             thumbnail: item.thumbnail ?? 'no link',
-            source: item.source ?? 'no source'
+            source: item.source ?? 'no source',
+            categories: cats,
           }
         });
 
         console.log('item saved');
 
-        console.log(newsItem);
+        // console.log(newsItem);
       }
 
       catch (error) {
