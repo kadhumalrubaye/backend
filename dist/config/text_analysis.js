@@ -2,14 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TextAnalyzer = void 0;
 class TextAnalyzer {
-    constructor() {
-        this.categories = ["عطلة", "رواتب", "", "", "",];
-        this.urgent = '';
-    }
-    cleanText(txt) {
+    async cleanText(txt) {
         let text = '';
         //remove html charachters
-        text = txt.replace(/\&quot;/g, '');
+        text = txt.replace("&quot;", '').replace("<br/>", "");
         // text = txt.replace(/[^a-zA-Z\s]+/g, '');
         return text;
     }
@@ -19,11 +15,12 @@ class TextAnalyzer {
         const fullTxt = item.title.concat(' '.concat(item.contetn));
         // const categoryName: string = 'عاجل';
         let cleanedText;
-        cleanedText = this.cleanText(fullTxt);
+        cleanedText = await this.cleanText(fullTxt);
         let catid;
         // console.log(cleanedText);
         catName.map(async (cat) => {
             if (cleanedText.includes(cat)) {
+                console.log(`category ${cat} found`);
                 try {
                     const entry = await strapi.db.query('api::category.category').findOne({
                         where: { name: cat },

@@ -22,25 +22,27 @@ export class FeedUpdater {
 
 
   // 2
-  async getNewFeedItemsFrom(feedUrl: string): Promise<ItemDto[]> {
+  async getNewFeedItemsFromRss(feedUrl: string): Promise<ItemDto[]> {
     let itemDto: ItemDto;
-
-    let rss: Output<any>;
     let items: ItemDto[] = [];
-    const parser = new Parser({
-      // timeout: 1000,
-      customFields: {
-        item: [
-          ['media:content', 'media:content', {
-            keepArray: true
-          }],
-        ],
-      }
-    });
+    let rss: Output<any>;
+
+
 
     try {
+      const parser = new Parser({
+
+        // timeout: 1000,
+        customFields: {
+          item: [
+            ['media:content', 'media:content', {
+              keepArray: true
+            }],
+          ],
+        }
+      });
       rss = await parser.parseURL(feedUrl);
-      rss.items.forEach((item: Item) => {
+      rss.items.forEach(async (item: Item) => {
         itemDto = new ItemDto();
         itemDto.title = item.title;
         itemDto.description = item.contentSnippet;
@@ -49,13 +51,17 @@ export class FeedUpdater {
         itemDto.link = item.link;
         itemDto.pubDate = item.pubDate;
         itemDto.thumbnail = (Array.isArray(item['media:content'])) ? item['media:content'][0]['$'].url : 'https://picsum.photos/500/200';
-        // console.log( item.thumbnail);
         itemDto.source = rss.title;
-        itemDto.title = this.textAnalysis.cleanText(itemDto.title);
+        //clean text
+        // itemDto.title = await this.textAnalysis.cleanText(itemDto.title);
+        // itemDto.description = await this.textAnalysis.cleanText(itemDto.description);
+        // itemDto.contetn = await this.textAnalysis.cleanText(itemDto.contetn);
+        // console.log(itemDto);
+
         items.push(itemDto);
       });
     } catch (error) {
-      console.error("Something went wrong in getNewFeedItemsFrom");
+      console.error("Something went wrong in getNewFeedItemsFromRss");
       console.error(error.message);
     }
     console.log('item in rss');
@@ -72,6 +78,7 @@ export class FeedUpdater {
     let entry: RssSourceEntry[];
     try {
       entry = await strapi.entityService.findMany('api::rss-source.rss-source', {
+        where: { active: true }
       });
 
     } catch (error) {
@@ -87,9 +94,10 @@ export class FeedUpdater {
     try {
       const feeds: RssSourceEntry[] = await this.getFeedUrls();
       for (let i = 0; i < feeds.length; i++) {
+        console.log(feeds[i].name);
 
         if (feeds[i].active) {
-          let feedItems: ItemDto[] = await this.getNewFeedItemsFrom(feeds[i].link);
+          let feedItems: ItemDto[] = await this.getNewFeedItemsFromRss(feeds[i].link);
           allNewFeedItems = [...allNewFeedItems, ...feedItems];
         }
       }
@@ -98,10 +106,9 @@ export class FeedUpdater {
       console.log(error);
 
     }
-    // console.log(allNewFeedItems);
-
     return allNewFeedItems;
   }
+
   private async createItem() {
     const feedItems: ItemDto[] = await this.getNewFeedItems();
 
@@ -110,8 +117,6 @@ export class FeedUpdater {
       const cats: number[] = await this.textAnalysis.addItemToUrgentCategory(item);
 
       try {
-
-
         const newsItem = await strapi.entityService.create(
           'api::item.item', {
 
@@ -129,27 +134,20 @@ export class FeedUpdater {
         });
 
         console.log('item saved');
-
-        // console.log(newsItem);
       }
 
       catch (error) {
         if (error instanceof YupValidationError) {
           console.log('YupValidationError ');
-
         }
         console.log('error in item create');
-
         console.log(error.message);
-
       }
     }
   }
   // 5
   async main() {
     console.log('main start');
-
-
     await this.createItem();
   }
 

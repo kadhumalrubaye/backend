@@ -15,23 +15,23 @@ class FeedUpdater {
         this.textAnalysis = new text_analysis_1.TextAnalyzer();
     }
     // 2
-    async getNewFeedItemsFrom(feedUrl) {
+    async getNewFeedItemsFromRss(feedUrl) {
         let itemDto;
-        let rss;
         let items = [];
-        const parser = new rss_parser_1.default({
-            // timeout: 1000,
-            customFields: {
-                item: [
-                    ['media:content', 'media:content', {
-                            keepArray: true
-                        }],
-                ],
-            }
-        });
+        let rss;
         try {
+            const parser = new rss_parser_1.default({
+                // timeout: 1000,
+                customFields: {
+                    item: [
+                        ['media:content', 'media:content', {
+                                keepArray: true
+                            }],
+                    ],
+                }
+            });
             rss = await parser.parseURL(feedUrl);
-            rss.items.forEach((item) => {
+            rss.items.forEach(async (item) => {
                 itemDto = new itemDto_1.ItemDto();
                 itemDto.title = item.title;
                 itemDto.description = item.contentSnippet;
@@ -40,14 +40,17 @@ class FeedUpdater {
                 itemDto.link = item.link;
                 itemDto.pubDate = item.pubDate;
                 itemDto.thumbnail = (Array.isArray(item['media:content'])) ? item['media:content'][0]['$'].url : 'https://picsum.photos/500/200';
-                // console.log( item.thumbnail);
                 itemDto.source = rss.title;
-                itemDto.title = this.textAnalysis.cleanText(itemDto.title);
+                //clean text
+                // itemDto.title = await this.textAnalysis.cleanText(itemDto.title);
+                // itemDto.description = await this.textAnalysis.cleanText(itemDto.description);
+                // itemDto.contetn = await this.textAnalysis.cleanText(itemDto.contetn);
+                // console.log(itemDto);
                 items.push(itemDto);
             });
         }
         catch (error) {
-            console.error("Something went wrong in getNewFeedItemsFrom");
+            console.error("Something went wrong in getNewFeedItemsFromRss");
             console.error(error.message);
         }
         console.log('item in rss');
@@ -59,7 +62,9 @@ class FeedUpdater {
         // console.log('get feed urls');
         let entry;
         try {
-            entry = await strapi.entityService.findMany('api::rss-source.rss-source', {});
+            entry = await strapi.entityService.findMany('api::rss-source.rss-source', {
+                where: { active: true }
+            });
         }
         catch (error) {
             console.error("Something went wrong in getFeedUrls");
@@ -73,8 +78,9 @@ class FeedUpdater {
         try {
             const feeds = await this.getFeedUrls();
             for (let i = 0; i < feeds.length; i++) {
+                console.log(feeds[i].name);
                 if (feeds[i].active) {
-                    let feedItems = await this.getNewFeedItemsFrom(feeds[i].link);
+                    let feedItems = await this.getNewFeedItemsFromRss(feeds[i].link);
                     allNewFeedItems = [...allNewFeedItems, ...feedItems];
                 }
             }
@@ -83,7 +89,6 @@ class FeedUpdater {
             console.log('error in getNewFeedItems');
             console.log(error);
         }
-        // console.log(allNewFeedItems);
         return allNewFeedItems;
     }
     async createItem() {
@@ -107,7 +112,6 @@ class FeedUpdater {
                     }
                 });
                 console.log('item saved');
-                // console.log(newsItem);
             }
             catch (error) {
                 if (error instanceof errors_1.YupValidationError) {

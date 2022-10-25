@@ -2,14 +2,15 @@ import { ItemDto } from "../src/api/item/dto/itemDto";
 
 
 export class TextAnalyzer {
-    categories: string[] = ["عطلة", "رواتب", "", "", "",];
-    urgent: string = ''
 
-    cleanText(txt: string): string {
+
+    async cleanText(txt: string): Promise<string> {
         let text: string = '';
 
+
+
         //remove html charachters
-        text = txt.replace(/\&quot;/g, '');
+        text = txt.replace("&quot;", '').replace("<br/>", "");
         // text = txt.replace(/[^a-zA-Z\s]+/g, '');
 
         return text;
@@ -21,11 +22,13 @@ export class TextAnalyzer {
         const fullTxt: string = item.title.concat(' '.concat(item.contetn));
         // const categoryName: string = 'عاجل';
         let cleanedText: string;
-        cleanedText = this.cleanText(fullTxt);
+        cleanedText = await this.cleanText(fullTxt);
         let catid: number;
         // console.log(cleanedText);
         catName.map(async (cat: string) => {
             if (cleanedText.includes(cat)) {
+                console.log(`category ${cat} found`);
+
                 try {
                     const entry = await strapi.db.query('api::category.category').findOne({
 

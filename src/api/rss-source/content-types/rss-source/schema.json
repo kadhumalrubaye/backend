@@ -4,7 +4,8 @@
   "info": {
     "singularName": "rss-source",
     "pluralName": "rss-sources",
-    "displayName": "rssSource"
+    "displayName": "rssSource",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -12,15 +13,16 @@
   "pluginOptions": {},
   "attributes": {
     "link": {
-      "type": "string"
+      "type": "string",
+      "unique": true
     },
     "active": {
       "type": "boolean",
       "default": true
     },
     "name": {
-      "type": "string"
+      "type": "string",
+      "unique": true
     }
   }
-
 }
